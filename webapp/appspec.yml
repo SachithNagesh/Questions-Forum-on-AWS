@@ -1,0 +1,18 @@
+version: 0.0
+os: linux
+files:
+  - source: /
+    destination: /home/ubuntu/webapp
+hooks:
+  BeforeInstall:
+  - location: scripts/before-install.sh
+    runas: root
+    timeout: 300
+  AfterInstall:
+    - location: scripts/npm-install.sh
+      runas: root
+      timeout: 300
+  ApplicationStart:
+    - location: scripts/npm-start.sh
+      runas: root
+      timeout: 300

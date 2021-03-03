@@ -1,0 +1,53 @@
+{
+    "variables": {
+      "aws_access_key": "{{env `AWS_ACCESS_KEY`}}",
+      "aws_secret_key": "{{env `AWS_SECRET_KEY`}}",
+      "aws_region": "{{env `AWS_REGION`}}",
+      "source_ami": "ami-0817d428a6fb68645",
+      "ssh_username": "ubuntu",
+      "ami_users": "{{env `AMI_USERS`}}"
+    },
+    "builders": [{
+      "type": "amazon-ebs",
+      "ami_users" : "{{user `ami_users`}}",
+      "access_key": "{{user `aws_access_key`}}",
+      "secret_key": "{{user `aws_secret_key`}}",
+      "region": "{{user `aws_region`}}",
+      "source_ami": "{{user `source_ami`}}",
+      "instance_type": "t2.micro",
+      "vpc_id": "vpc-b5a360c8",
+      "subnet_id": "subnet-4967d716",
+      "ssh_username": "ubuntu",
+      "ami_name": "csye6225_{{timestamp}}",
+      "ami_description": "Ubuntu AMI for CSYE 6225 - Fall 2020 - Assignment 4",
+      "launch_block_device_mappings": [
+                  {
+                      "device_name": "/dev/sda1",
+                      "volume_size": 8,
+                      "volume_type": "gp2",
+                      "delete_on_termination": true
+                  }
+              ]
+    }],
+    "provisioners": [
+          {
+              "type": "shell",
+              "inline": [
+                "sudo apt update -y",
+                "sudo apt-get install curl -y",
+                "curl -sL https://deb.nodesource.com/setup_12.x | sudo -E bash -",
+                "sudo apt-get install nodejs -y",
+                "sudo apt-get install zip unzip",
+                "sudo apt-get install ruby -y",
+                "sudo apt-get install wget -y",
+                "sudo apt-get install awscli -y",
+                "cd /home/ubuntu",
+                "sudo wget https://aws-codedeploy-us-east-1.s3.us-east-1.amazonaws.com/latest/install",
+                "sudo chmod +x ./install",
+                "sudo ./install auto",
+                "sudo wget https://s3.us-east-1.amazonaws.com/amazoncloudwatch-agent-us-east-1/ubuntu/amd64/latest/amazon-cloudwatch-agent.deb",
+                "sudo dpkg -i -E ./amazon-cloudwatch-agent.deb"
+              ]
+          }
+      ]
+  }
