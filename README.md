@@ -22,7 +22,7 @@ Contains code for building serverless lambda on AWS with CI
 
 Contains code for functional web application using node.js and express.js
 
-## Contributins
+## Contributions
 
 Author - Sachith Nagesh
 
